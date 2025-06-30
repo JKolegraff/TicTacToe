@@ -58,12 +58,12 @@ function endDrag() {
 // 👇 Exposed setup function
 export function InventoryDragSetup(setDragInfo, clearDragInfo) {
     document.querySelectorAll('.piece-slot img').forEach(img => {
-      img.addEventListener('mousedown', e => {
+      img.addEventListener('pointerdown', e => {
         startDrag(e, setDragInfo); // 👈 Pass it here
       });
     });
   
-    document.addEventListener('mouseup', (e) => {
+    document.addEventListener('pointerup', (e) => {
         if (dragElement) {
             const target = document.elementFromPoint(e.clientX, e.clientY);
             if (target && target.closest('.cell')) {
@@ -76,7 +76,7 @@ export function InventoryDragSetup(setDragInfo, clearDragInfo) {
         }
     });
   
-    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('pointermove', dragMove);
   }
   
 

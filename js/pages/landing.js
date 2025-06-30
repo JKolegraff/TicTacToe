@@ -60,7 +60,7 @@ export async function startNewGame(user_uuid) {
       board_state: Array(9).fill(null),
       player_state: 0,
       status: 'waiting',
-      turn: 'p1',
+      turn: Math.random() < 0.5 ? 'p1' : 'p2',
       game_type: gameType, // ✅ include this
       player_state: [
         { small: 4, medium: 3, large: 2 }, // Player 1
@@ -81,6 +81,29 @@ export async function startNewGame(user_uuid) {
   // window.location.href = `game.html?game_id=${data.id}`;
   window.location.href = '../../ttt.html';
 }
+
+export async function joinGame(user_uuid, gameId) {
+  const { data, error } = await supabase
+    .from('games')
+    .update({
+      player2_id: user_uuid,
+      status: 'playing'
+    })
+    .eq('id', gameId)
+    .is('player2_id', null) // prevent joining already-full games
+    .select()
+    .single();
+
+  if (error || !data) {
+    console.error('Supabase join error:', error);
+    alert('Failed to join the game. It may already be full.');
+    return;
+  }
+
+  setGameId(data.id, 'p2');
+  window.location.href = '../../ttt.html';
+}
+
 
 
 // 👇 Optional global if joinGame is needed by inline onclick

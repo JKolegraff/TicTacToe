@@ -22,7 +22,7 @@
         <!-- 🔹 Game Board -->
         <div class="board-wrapper">
             <!-- Overlay for "Waiting..." or "Start Game" -->
-            <div id="board-overlay" class="overlay hidden">
+            <div id="board-overlay" class="overlay">
                 <p id="overlay-text">Waiting for opponent...</p>
                 <!--<button id="start-game-btn" class="hidden">Start Game</button>-->
             </div>
@@ -64,7 +64,8 @@
         import { changeDisplayName, renderBoard } from './js/pages/ttt.js';
         import { InventoryDragSetup } from './js/pages/ttt/inventory-drag.js';
         import { BoardHoverSetup, SetCurrentDragPiece, ClearCurrentDragPiece, renderBoardFromState } from './js/pages/ttt/board.js';
-        import { loadBoardState } from './js/pages/ttt/game-logic.js';
+        import { loadBoardState, updateGame } from './js/pages/ttt/game-logic.js';
+        import { subscribeToGameUpdates } from './js/pages/ttt/game-subscribe.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             const user_data = getUserData();
@@ -75,6 +76,8 @@
             renderBoard();
             BoardHoverSetup();
             InventoryDragSetup(SetCurrentDragPiece, ClearCurrentDragPiece);
+
+            subscribeToGameUpdates(user_data.game_id, updateGame);
 
             if (user_data.game_id) {
                 loadBoardState(user_data.game_id, user_data.player, renderBoardFromState)
