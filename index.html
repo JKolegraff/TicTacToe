@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turn-Based Games</title>
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+
+<body>
+    <header>
+        <h1>💖 Games for Us</h1>
+    </header>
+
+    <main class="main-container">
+        <section id="active-games-panel">
+            <h2>🎮 Active Games</h2>
+            <div id="game-list">Loading games...</div>
+        </section>
+
+        <section id="new-game-panel">
+            <h2>➕ Start a New Game</h2>
+            <select id="game-type-select">
+                <option value="tic-tac-toe">Tic-Tac-Toe</option>
+                <!-- Add more game types later -->
+            </select>
+            <button id="start-game-btn">Start Game</button>
+        </section>
+    </main>
+
+    <!--<script type="module" src="js/landing.js"></script>-->
+    <script type="module">
+        import { getUserData } from './js/core/db.js';
+        import { loadActiveGames, startNewGame } from './js/pages/landing.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user_data = getUserData();
+            console.log('Landing page loaded for user:', user_data.uuid);
+
+            // You can now call setup functions independently here:
+            loadActiveGames();
+            //setupNewGameButton();
+            document.getElementById('start-game-btn').addEventListener('click', () => startNewGame(user_data.uuid));
+        });
+
+    </script>
+</body>
+
+</html>
