@@ -59,6 +59,7 @@ function endDrag() {
 export function InventoryDragSetup(setDragInfo, clearDragInfo) {
     document.querySelectorAll('.piece-slot img').forEach(img => {
       img.addEventListener('pointerdown', e => {
+        e.target.setPointerCapture(e.pointerId); // 👈 FIX: lock pointer to this element
         startDrag(e, setDragInfo); // 👈 Pass it here
       });
     });
