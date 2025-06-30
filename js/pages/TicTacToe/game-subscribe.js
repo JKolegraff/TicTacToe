@@ -1,8 +1,9 @@
 import { supabase } from '../../core/db.js'; // adjust path as needed
+import { updateGame } from './game-subscribe.js';
 
 let gameChannel = null;
 
-export function subscribeToGameUpdates(gameId, onUpdateCallback) {
+export function subscribeToGameUpdates(gameId) {
   // Unsubscribe from existing channel if already active
   if (gameChannel) {
     supabase.removeChannel(gameChannel);
@@ -20,7 +21,7 @@ export function subscribeToGameUpdates(gameId, onUpdateCallback) {
       },
       payload => {
         console.log('[Realtime] Game updated:', payload.new);
-        onUpdateCallback(payload.new);
+        updateGame(payload.new);
       }
     )
     .subscribe(status => {
@@ -30,4 +31,13 @@ export function subscribeToGameUpdates(gameId, onUpdateCallback) {
     });
 }
 
+//Loads the game data from the database
+export async function getGameData(gameId) {
+    const { data: gameData, error: fetchError } = await supabase
+        .from('games')
+        .select('*')
+        .eq('id', gameId)
+        .single();
 
+        updateGame(data);
+}

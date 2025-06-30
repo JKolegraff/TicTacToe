@@ -4,8 +4,8 @@ import { disableBoard, enableBoard, setStatusText } from './ui.js'; // optional 
 import { renderBoardFromState } from './board.js';
 
 // You should define this in ttt.js or game-logic.js
-const gameState = Array(9).fill(null); // one slot per cell, initialized as empty
-const inventoryCount = { small: 4, medium: 3, large: 2 };
+let gameState = Array(9).fill(null); // one slot per cell, initialized as empty
+let inventoryCount = { small: 4, medium: 3, large: 2 };
 const PLAYER_NUM = {p1: 1, p2: 2};
 
 export function updateGameBoard(index, dragState) {
