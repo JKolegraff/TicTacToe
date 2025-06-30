@@ -81,6 +81,11 @@ export function InventoryDragSetup(setDragInfo, clearDragInfo) {
   
 
   export function updateInventoryDisplay(inventoryCount) {
+    if (!inventoryCount) {
+      console.warn('❗ updateInventoryDisplay called with invalid inventoryCount:', inventoryCount);
+      return;
+    }
+  
     const sizes = ['small', 'medium', 'large'];
   
     sizes.forEach(size => {
@@ -93,12 +98,9 @@ export function InventoryDragSetup(setDragInfo, clearDragInfo) {
       // Show/hide overlay if out of pieces
       const overlay = document.getElementById(`inventory-overlay-${size}`);
       if (overlay) {
-        if (inventoryCount[size] <= 0) {
-          overlay.classList.remove('hidden');
-        } else {
-          overlay.classList.add('hidden');
-        }
+        overlay.classList.toggle('hidden', inventoryCount[size] > 0);
       }
     });
   }
+  
   

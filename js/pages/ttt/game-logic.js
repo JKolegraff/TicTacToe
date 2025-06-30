@@ -1,4 +1,4 @@
-import { supabase } from '../../core/db.js'; // or wherever your client is
+import { supabase, getUserData } from '../../core/db.js'; // or wherever your client is
 import { updateInventoryDisplay } from './inventory-drag.js';
 import { disableBoard, enableBoard, setStatusText } from './ui.js'; // optional helpers
 import { renderBoardFromState } from './board.js';
@@ -83,15 +83,15 @@ function checkForWin(player) {
       
         // Replace current player's inventory with updatedInventory
         const newPlayerState = [...currentPlayerState];
-        newPlayerState[playerIndex] = updatedInventory;
+        newPlayerState[playerIndex] = inventoryCount;
       
-        nextTurn = gameData.turn === 'p1' ? 'p2' : 'p1';
+        const nextTurn = gameData.turn === 'p1' ? 'p2' : 'p1';
 
         // Update row in Supabase
         const { error: updateError } = await supabase
           .from('games')
           .update({
-            board_state: updatedBoard,
+            board_state: gameState,
             turn: nextTurn,
             player_state: newPlayerState
           })
@@ -108,7 +108,7 @@ function checkForWin(player) {
 export async function loadBoardState(gameId, currPlayer, onBoardReady) {
   const { data, error } = await supabase
     .from('games')
-    .select('board_state, player_state')
+    .select('*')
     .eq('id', gameId)
     .single();
 
@@ -117,10 +117,15 @@ export async function loadBoardState(gameId, currPlayer, onBoardReady) {
     return;
   }
 
-  let inventoryCount = data.player_state[PLAYER_NUM[currPlayer]];
+  //let inventoryCount = data.player_state[PLAYER_NUM[currPlayer]];
   // Call the render function you pass in
-  updateInventoryDisplay(inventoryCount);
-  onBoardReady(data.board_state);
+  //updateInventoryDisplay(inventoryCount);
+  const roleIndex = currPlayer === 'p1' ? 0 : 1;
+    const inventory = data.player_state?.[roleIndex];
+    updateInventoryDisplay(inventory);
+
+  //onBoardReady(data.board_state);
+  updateGame(data);
 }
 
 

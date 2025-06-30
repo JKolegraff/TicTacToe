@@ -24,7 +24,7 @@ export async function checkAndResumeGame(user) {
 }
 
 
-export async function loadActiveGames() {
+export async function loadActiveGames(player_uuid) {
   const { data: games, error } = await supabase
     .from('games')
     .select('*')
@@ -44,7 +44,7 @@ export async function loadActiveGames() {
     item.className = 'game-item';
     item.innerHTML = `
       <span>🎲 ${game.game_type}</span>
-      <button onclick="joinGame('${game.id}')">Join</button>
+      <button onclick="joinGame('${player_uuid}', '${game.id}')">Join</button>
     `;
     gameList.appendChild(item);
   });
@@ -104,6 +104,7 @@ export async function joinGame(user_uuid, gameId) {
   window.location.href = '../../ttt.html';
 }
 
+window.joinGame = joinGame;
 
 
 // 👇 Optional global if joinGame is needed by inline onclick
