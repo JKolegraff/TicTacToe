@@ -79,3 +79,26 @@ export function InventoryDragSetup(setDragInfo, clearDragInfo) {
     document.addEventListener('mousemove', dragMove);
   }
   
+
+  export function updateInventoryDisplay(inventoryCount) {
+    const sizes = ['small', 'medium', 'large'];
+  
+    sizes.forEach(size => {
+      // Update count text
+      const countEl = document.getElementById(`count-${size}`);
+      if (countEl) {
+        countEl.textContent = inventoryCount[size];
+      }
+  
+      // Show/hide overlay if out of pieces
+      const overlay = document.getElementById(`inventory-overlay-${size}`);
+      if (overlay) {
+        if (inventoryCount[size] <= 0) {
+          overlay.classList.remove('hidden');
+        } else {
+          overlay.classList.add('hidden');
+        }
+      }
+    });
+  }
+  

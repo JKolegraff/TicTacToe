@@ -1,7 +1,10 @@
 import { supabase } from '../../core/db.js'; // or wherever your client is
+import { updateInventoryDisplay } from './inventory-drag.js';
 
 // You should define this in ttt.js or game-logic.js
 const gameState = Array(9).fill(null); // one slot per cell, initialized as empty
+const inventoryCount = { small: 4, medium: 3, large: 2 };
+const PLAYER_NUM = {p1: 1, p2: 2};
 
 export function updateGameBoard(index, dragState) {
   const { player, size } = dragState;
@@ -12,16 +15,27 @@ export function updateGameBoard(index, dragState) {
     size
   };
 
-  // Optional: log game state for debugging
+  // 🔻 Reduce inventory count for the piece size
+  if (inventoryCount[size] > 0) {
+    inventoryCount[size]--;
+  } else {
+    console.warn(`Tried to use ${size}, but none left!`);
+  }
+
+  // 🔁 Update visible inventory UI
+  updateInventoryDisplay(inventoryCount);
+
+  // 🧠 Log game state for debugging
   console.log(`Updated cell ${index} with ${player} ${size}`);
   console.log(gameState);
 
-  // Optional: check win conditions
+  // 🏁 Check for win
   checkForWin(player);
 
-  // Optional: switch turns
+  // 🔄 Switch turns
   switchTurns();
 }
+
 
 
 function checkForWin(player) {
@@ -44,16 +58,16 @@ function checkForWin(player) {
   }
   
   function switchTurns() {
-    currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
+    //currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
     // TODO: update UI, disable inventory for other player, etc.
   }
   
 
 //Loads the board state from the database and calls the provided render function
-export async function loadBoardState(gameId, onBoardReady) {
+export async function loadBoardState(gameId, currPlayer, onBoardReady) {
   const { data, error } = await supabase
     .from('games')
-    .select('board_state')
+    .select('board_state, player_state')
     .eq('id', gameId)
     .single();
 
@@ -62,7 +76,9 @@ export async function loadBoardState(gameId, onBoardReady) {
     return;
   }
 
+  let inventoryCount = data.player_state[PLAYER_NUM[currPlayer]];
   // Call the render function you pass in
+  updateInventoryDisplay(inventoryCount);
   onBoardReady(data.board_state);
 }
 

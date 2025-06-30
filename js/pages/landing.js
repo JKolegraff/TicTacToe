@@ -58,9 +58,14 @@ export async function startNewGame(user_uuid) {
     .insert([{
       player1_id: user_uuid, // ✅ match your table column name
       board_state: Array(9).fill(null),
+      player_state: 0,
       status: 'waiting',
       turn: 'p1',
-      game_type: gameType // ✅ include this
+      game_type: gameType, // ✅ include this
+      player_state: [
+        { small: 4, medium: 3, large: 2 }, // Player 1
+        { small: 4, medium: 3, large: 2 }  // Player 2
+      ]
     }])
     .select()
     .single();
@@ -71,7 +76,7 @@ export async function startNewGame(user_uuid) {
     return;
   }
 
-  setGameId(data.id);
+  setGameId(data.id, 'p1');
   // Redirect to the game page with game ID
   // window.location.href = `game.html?game_id=${data.id}`;
   window.location.href = '../../ttt.html';

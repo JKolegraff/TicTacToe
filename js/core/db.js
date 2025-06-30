@@ -30,9 +30,10 @@ export function getUserData() {
 }
 
 
-export function setGameId(gameId) {
+export function setGameId(gameId, playerNum) {
   const userData = getUserData(); // gets or creates user_data
   userData.game_id = gameId;
+  userData.player = playerNum;
   sessionStorage.setItem('user_data', JSON.stringify(userData));
 }
 
@@ -40,6 +41,7 @@ export function setGameId(gameId) {
 export function clearGameId() {
   const userData = getUserData();
   delete userData.game_id;
+  delete userData.player;
   sessionStorage.setItem('user_data', JSON.stringify(userData));
 }
 

@@ -36,19 +36,22 @@
             <div class="inventory">
                 <div class="piece-row">
                     <div class="piece-slot" data-size="small">
+                        <div id="inventory-overlay-small" class="overlay hidden"></div>
                         <img class="small" src="images/TTT_Red.png" alt="Small Piece" data-size="small"
                             draggable="false" />
                         <div class="count" id="count-small">4</div>
                     </div>
                     <div class="piece-slot" data-size="medium">
+                        <div id="inventory-overlay-medium" class="overlay hidden"></div>
                         <img class="medium" src="images/TTT_Red.png" alt="Medium Piece" data-size="medium"
                             draggable="false" />
                         <div class="count" id="count-medium">3</div>
                     </div>
                     <div class="piece-slot" data-size="large">
+                        <div id="inventory-overlay-large" class="overlay hidden"></div>
                         <img class="large" src="images/TTT_Red.png" alt="Large Piece" data-size="large"
                             draggable="false" s />
-                        <div class="count" id="count-large">3</div>
+                        <div class="count" id="count-large">2</div>
                     </div>
                 </div>
             </div>
@@ -74,7 +77,7 @@
             InventoryDragSetup(SetCurrentDragPiece, ClearCurrentDragPiece);
 
             if (user_data.game_id) {
-                loadBoardState(user_data.game_id, renderBoardFromState)
+                loadBoardState(user_data.game_id, user_data.player, renderBoardFromState)
             }
         });
     </script>

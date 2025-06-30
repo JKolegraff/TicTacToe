@@ -150,6 +150,7 @@ body {
     align-items: center;
     justify-content: flex-start;
     min-width: 0;
+    position: relative;
   }
   
   .piece-slot img {
