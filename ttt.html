@@ -60,7 +60,8 @@
         import { getUserData } from './js/core/db.js';
         import { changeDisplayName, renderBoard } from './js/pages/ttt.js';
         import { InventoryDragSetup } from './js/pages/ttt/inventory-drag.js';
-        import { BoardHoverSetup, SetCurrentDragPiece, ClearCurrentDragPiece } from './js/pages/ttt/board.js';
+        import { BoardHoverSetup, SetCurrentDragPiece, ClearCurrentDragPiece, renderBoardFromState } from './js/pages/ttt/board.js';
+        import { loadBoardState } from './js/pages/ttt/game-logic.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             const user_data = getUserData();
@@ -71,6 +72,10 @@
             renderBoard();
             BoardHoverSetup();
             InventoryDragSetup(SetCurrentDragPiece, ClearCurrentDragPiece);
+
+            if (user_data.game_id) {
+                loadBoardState(user_data.game_id, renderBoardFromState)
+            }
         });
     </script>
 </body>

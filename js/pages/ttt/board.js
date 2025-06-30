@@ -89,3 +89,23 @@ cellImg.dataset.size = dragState.size;
     const index = parseInt(cell.dataset.cellIndex);
     updateGameBoard(index, dragState); // <-- You can define this however you want
   }
+
+  // Renders the board from the provided state array
+export function renderBoardFromState(boardArray) {
+    boardArray.forEach((cell, i) => {
+      const cellEl = document.querySelector(`.cell[data-cell-index="${i}"]`);
+      const img = cellEl.querySelector('img');
+  
+      if (cell) {
+        img.src = `images/${cell.player}-piece-${cell.size}.png`;
+        img.className = cell.size;
+        img.dataset.player = cell.player;
+        img.dataset.size = cell.size;
+      } else {
+        img.src = '';
+        img.className = '';
+        img.dataset.player = '';
+        img.dataset.size = '';
+      }
+    });
+  }

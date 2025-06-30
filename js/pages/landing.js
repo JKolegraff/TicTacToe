@@ -1,9 +1,28 @@
-import { supabase } from '../core/db.js';
+import { supabase, setGameId } from '../core/db.js';
+import { getUserData, getGameTypeIfExists } from '../core/db.js';
 
-//document.addEventListener('DOMContentLoaded', () => {
- // loadActiveGames();
- // document.getElementById('start-game-btn').addEventListener('click', startNewGame);
-//});
+export async function checkAndResumeGame(user) {
+  //const user = getUserData();
+
+  if (user.game_id) {
+    const gameType = await getGameTypeIfExists(user.game_id);
+
+    if (gameType) {
+      // Redirect based on game type
+      switch (gameType) {
+        case 'tic-tac-toe':
+          window.location.href = '../ttt.html';
+          break;
+        // Add other types here as needed
+        default:
+          alert(`Unsupported game type: ${gameType}`);
+      }
+    } else {
+      console.log('Game not found or deleted');
+    }
+  }
+}
+
 
 export async function loadActiveGames() {
   const { data: games, error } = await supabase
@@ -52,6 +71,7 @@ export async function startNewGame(user_uuid) {
     return;
   }
 
+  setGameId(data.id);
   // Redirect to the game page with game ID
   // window.location.href = `game.html?game_id=${data.id}`;
   window.location.href = '../../ttt.html';

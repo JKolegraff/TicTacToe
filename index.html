@@ -32,11 +32,13 @@
     <!--<script type="module" src="js/landing.js"></script>-->
     <script type="module">
         import { getUserData } from './js/core/db.js';
-        import { loadActiveGames, startNewGame } from './js/pages/landing.js';
+        import { loadActiveGames, startNewGame, checkAndResumeGame } from './js/pages/landing.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             const user_data = getUserData();
             console.log('Landing page loaded for user:', user_data.uuid);
+
+            checkAndResumeGame(user_data);
 
             // You can now call setup functions independently here:
             loadActiveGames();

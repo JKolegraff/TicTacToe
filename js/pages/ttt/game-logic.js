@@ -1,3 +1,5 @@
+import { supabase } from '../../core/db.js'; // or wherever your client is
+
 // You should define this in ttt.js or game-logic.js
 const gameState = Array(9).fill(null); // one slot per cell, initialized as empty
 
@@ -45,4 +47,24 @@ function checkForWin(player) {
     currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
     // TODO: update UI, disable inventory for other player, etc.
   }
+  
+
+//Loads the board state from the database and calls the provided render function
+export async function loadBoardState(gameId, onBoardReady) {
+  const { data, error } = await supabase
+    .from('games')
+    .select('board_state')
+    .eq('id', gameId)
+    .single();
+
+  if (error || !data?.board_state) {
+    console.error('Failed to load board state:', error);
+    return;
+  }
+
+  // Call the render function you pass in
+  onBoardReady(data.board_state);
+}
+
+
   

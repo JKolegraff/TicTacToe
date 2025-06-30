@@ -28,3 +28,31 @@ export function getUserData() {
   sessionStorage.setItem('user_data', JSON.stringify(user));
   return user;
 }
+
+
+export function setGameId(gameId) {
+  const userData = getUserData(); // gets or creates user_data
+  userData.game_id = gameId;
+  sessionStorage.setItem('user_data', JSON.stringify(userData));
+}
+
+
+export function clearGameId() {
+  const userData = getUserData();
+  delete userData.game_id;
+  sessionStorage.setItem('user_data', JSON.stringify(userData));
+}
+
+export async function getGameTypeIfExists(gameId) {
+  const { data, error } = await supabase
+    .from('games')
+    .select('game_type')
+    .eq('id', gameId)
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return data.game_type;
+}
