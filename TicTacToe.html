@@ -69,8 +69,9 @@
         import { getSessionData, getGameId } from './js/pages/TicTacToe/session-data.js';
         import { subscribeToGameUpdates } from './js/pages/TicTacToe/game-subscribe.js';
         import { changeDisplayName } from './js/pages/TicTacToe/ui.js';
-        import { buildBoard } from './js/pages/TicTacToe/board.js';
+        import { buildBoard, SetCurrentDragPiece, ClearCurrentDragPiece } from './js/pages/TicTacToe/board.js';
         import { renderInventoryToScreen } from './js/pages/TicTacToe/inventory.js';
+        import { DragNDropSetup } from './js/pages/TicTacToe/drag-n-drop.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             getSessionData();
@@ -78,6 +79,8 @@
 
             buildBoard();
             renderInventoryToScreen();
+
+            DragNDropSetup(SetCurrentDragPiece, ClearCurrentDragPiece);
 
             subscribeToGameUpdates(getGameId());
 
