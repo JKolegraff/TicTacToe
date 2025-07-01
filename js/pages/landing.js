@@ -2,8 +2,6 @@ import { supabase, setGameId } from '../core/db.js';
 import { getUserData, getGameTypeIfExists } from '../core/db.js';
 
 export async function checkAndResumeGame(user) {
-  //const user = getUserData();
-
   if (user.game_id) {
     const gameType = await getGameTypeIfExists(user.game_id);
 
@@ -12,16 +10,25 @@ export async function checkAndResumeGame(user) {
       switch (gameType) {
         case 'tic-tac-toe':
           window.location.href = '../TicTacToe.html';
-          break;
-        // Add other types here as needed
+          return;
+        // Add other game types here if needed
         default:
           alert(`Unsupported game type: ${gameType}`);
+          return;
       }
     } else {
-      console.log('Game not found or deleted');
+      console.log('Game not found or deleted. Clearing session game_id.');
+
+      // ❌ Remove game_id from user object and session storage
+      delete user.game_id;
+      sessionStorage.setItem('user_data', JSON.stringify(user));
     }
   }
+
+  // Continue loading the lobby or landing page as normal
+  console.log('No active game found, continuing normally...');
 }
+
 
 
 export async function loadActiveGames(player_uuid) {
@@ -106,8 +113,24 @@ export async function joinGame(user_uuid, gameId) {
 
 window.joinGame = joinGame;
 
+// Subscribe to changes in the lobby games table
+export function subscribeToLobbyGames(onChangeCallback) {
+  const channel = supabase
+    .channel('lobby-games-subscription')
+    .on(
+      'postgres_changes',
+      {
+        event: '*', // matches INSERT, UPDATE, DELETE
+        schema: 'public',
+        table: 'games'
+      },
+      (payload) => {
+        console.log('📡 Games table changed:', payload);
+        onChangeCallback(payload); // You define how to react to changes
+      }
+    )
+    .subscribe();
 
-// 👇 Optional global if joinGame is needed by inline onclick
-//window.joinGame = function(gameId) {
-  //window.location.href = `game.html?game_id=${gameId}`;
-//}
+  return channel;
+}
+
