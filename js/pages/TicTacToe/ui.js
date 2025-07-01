@@ -10,7 +10,7 @@ export function changeDisplayName(elementName) {
 }
 
 export function setStatusText(text) {
-    const el = document.getElementById('status-text');
+    const el = document.getElementById('overlay-text');
     if (el) el.textContent = text;
   }
   

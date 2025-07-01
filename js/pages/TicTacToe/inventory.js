@@ -1,4 +1,4 @@
-import { getPlayerImage } from './session-data.js';
+import { getPlayer } from './session-data.js';
 
 //let inventory = {small: 4, medium: 3, large: 2 }; // one slot per cell, initialized as empty
 let inventory = [{small: 4, medium: 3, large: 2 }, {small: 4, medium: 3, large: 2 }];
@@ -49,7 +49,7 @@ export function renderInventoryToScreen(player) {
         // ✅ Update piece image
         const imgEl = document.querySelector(`.piece-slot[data-size="${size}"] img`);
         if (imgEl) {
-            imgEl.src = getPlayerImage();
+            imgEl.src = getPlayer() === 'p1' ? 'images/TTT_Red.png' : 'images/TTT_Green.png';
         }
 
         // Show/hide overlay if out of pieces
