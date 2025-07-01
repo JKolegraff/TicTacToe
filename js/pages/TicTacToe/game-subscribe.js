@@ -3,7 +3,7 @@ import { updateGame } from './game-logic.js'; // adjust path as needed
 
 let gameChannel = null;
 
-export function subscribeToGameUpdates(gameId) {
+export async function subscribeToGameUpdates(gameId) {
   // Unsubscribe from existing channel if already active
   if (gameChannel) {
     supabase.removeChannel(gameChannel);
@@ -30,6 +30,30 @@ export function subscribeToGameUpdates(gameId) {
       }
     });
 }
+
+// Subscribes to game deletion events
+export function subscribeToGameDelete(gameId) {
+    const channel = supabase
+      .channel(`game-delete-${gameId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'games',
+          filter: `id=eq.${gameId}`
+        },
+        (payload) => {
+          console.warn('🗑 Game was deleted:', payload);
+          alert('The game was cancelled or deleted. Returning to lobby.');
+          sessionStorage.removeItem('game_id');
+          window.location.href = 'index.html';
+        }
+      )
+      .subscribe();
+  
+    return channel; // so you can unsubscribe later if needed
+  }
 
 //Loads the game data from the database
 export async function getGameData(gameId) {

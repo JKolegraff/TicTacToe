@@ -14,6 +14,12 @@
         <!-- 🔹 Title -->
         <h1 class="title">Tic Tac Toe</h1>
 
+        <!--Game Controls-->
+        <div class="game-controls">
+            <button id="new-game-btn" title="Start New Game">🔄</button>
+            <button id="cancel-game-btn" title="Cancel Game">❌</button>
+        </div>
+
         <!-- 🔹 Player Name -->
         <div class="player-info">
             Player: <span id="player-name">Loading...</span>
@@ -66,14 +72,16 @@
         //import { BoardHoverSetup, SetCurrentDragPiece, ClearCurrentDragPiece, renderBoardFromState } from './js/pages/ttt/board.js';
         //import { loadBoardState, updateGame } from './js/pages/ttt/game-logic.js';
         //import { subscribeToGameUpdates } from './js/pages/ttt/game-subscribe.js';
+        import { setupGameControls } from './game-controls.js';
         import { getGameId } from './js/pages/TicTacToe/session-data.js';
-        import { subscribeToGameUpdates, getGameData } from './js/pages/TicTacToe/game-subscribe.js';
+        import { subscribeToGameUpdates, subscribeToGameDelete, getGameData } from './js/pages/TicTacToe/game-subscribe.js';
         import { changeDisplayName } from './js/pages/TicTacToe/ui.js';
         import { buildBoard, BoardHoverSetup, SetCurrentDragPiece, ClearCurrentDragPiece } from './js/pages/TicTacToe/board.js';
         import { renderInventoryToScreen } from './js/pages/TicTacToe/inventory.js';
         import { DragNDropSetup } from './js/pages/TicTacToe/drag-n-drop.js';
 
         document.addEventListener('DOMContentLoaded', () => {
+            setupGameControls();
             //getSessionData();
             changeDisplayName('player-name');
 
@@ -85,6 +93,7 @@
             DragNDropSetup(SetCurrentDragPiece, ClearCurrentDragPiece);
 
             subscribeToGameUpdates(getGameId());
+            subscribeToGameDelete(getGameId());
 
             getGameData(getGameId());
             //const user_data = getUserData();

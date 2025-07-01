@@ -14,6 +14,8 @@ body {
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
     text-align: center;
+    position: relative; /* 🔑 Required for absolute child positioning */
+    padding-top: 2rem; /* Give space for buttons */
   }
   
   .title {
@@ -187,5 +189,34 @@ body {
   }
   .drag-preview.large {
     width: 90%;
+  }
+  
+
+
+  /*----------------------Game Controls----------------------*/
+  .game-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+  
+  .game-controls button {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.2s ease;
+  }
+  
+  .game-controls button:hover {
+    transform: scale(1.2);
+  }
+  
+  #cancel-game-btn {
+    color: red;
   }
   
