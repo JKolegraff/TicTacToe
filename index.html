@@ -43,7 +43,7 @@
             subscribeToLobbyGames((payload) => {
                 // Re-fetch games or update the UI
                 console.log('Game table changed:', payload);
-                loadActiveGames(); // <- your existing logic to refresh the list
+                loadActiveGames(user_data.uuid); // <- your existing logic to refresh the list
             });
 
             // You can now call setup functions independently here:
