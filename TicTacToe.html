@@ -67,9 +67,9 @@
         //import { loadBoardState, updateGame } from './js/pages/ttt/game-logic.js';
         //import { subscribeToGameUpdates } from './js/pages/ttt/game-subscribe.js';
         import { getSessionData, getGameId } from './js/pages/TicTacToe/session-data.js';
-        import { subscribeToGameUpdates } from './js/pages/TicTacToe/game-subscribe.js';
+        import { subscribeToGameUpdates, getGameData } from './js/pages/TicTacToe/game-subscribe.js';
         import { changeDisplayName } from './js/pages/TicTacToe/ui.js';
-        import { buildBoard, SetCurrentDragPiece, ClearCurrentDragPiece } from './js/pages/TicTacToe/board.js';
+        import { buildBoard, BoardHoverSetup, SetCurrentDragPiece, ClearCurrentDragPiece } from './js/pages/TicTacToe/board.js';
         import { renderInventoryToScreen } from './js/pages/TicTacToe/inventory.js';
         import { DragNDropSetup } from './js/pages/TicTacToe/drag-n-drop.js';
 
@@ -78,12 +78,15 @@
             changeDisplayName('player-name');
 
             buildBoard();
+            //BoardHoverSetup();
+
             renderInventoryToScreen();
 
             DragNDropSetup(SetCurrentDragPiece, ClearCurrentDragPiece);
 
             subscribeToGameUpdates(getGameId());
 
+            getGameData(getGameId());
             //const user_data = getUserData();
             //console.log('Landing page loaded for user:', user_data.uuid);
 

@@ -39,5 +39,24 @@ export async function getGameData(gameId) {
         .eq('id', gameId)
         .single();
 
-        updateGame(data);
+        updateGame(gameData);
 }
+
+// Updates the board_state and player_state in the database
+export async function setGameData(gameId, boardState, playerState, nextTurn) {
+    const { data, error } = await supabase
+      .from('games')
+      .update({
+        board_state: boardState,
+        player_state: playerState,
+        turn: nextTurn
+      })
+      .eq('id', gameId);
+  
+    if (error) {
+      console.error('❌ Failed to update game data:', error.message);
+    } else {
+      console.log('✅ Game data updated successfully');
+    }
+  }
+  

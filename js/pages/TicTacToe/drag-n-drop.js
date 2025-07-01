@@ -1,5 +1,5 @@
 import { getPlayer } from './session-data.js';
-import { handlePieceDrop } from './board.js'; // Adjust path as needed
+import { handlePieceDrop, handleCellLeave, handleCellEnter } from './board.js'; // Adjust path as needed
 
 let dragElement = null;
 
@@ -42,11 +42,38 @@ function startDrag(e, setDragInfo) {
   }
   
 
+//function dragMove(e) {
+//  if (dragElement) {
+//    updateDragPosition(e);
+//  }
+//
+
+let lastHoveredCell = null;
+
 function dragMove(e) {
   if (dragElement) {
     updateDragPosition(e);
+
+    // Hide drag image so we can detect the real cell underneath
+    dragElement.style.display = 'none';
+    const target = document.elementFromPoint(e.clientX, e.clientY);
+    dragElement.style.display = 'block';
+
+    const cell = target?.closest('.cell');
+
+    if (cell !== lastHoveredCell) {
+      if (lastHoveredCell) {
+        handleCellLeave({ currentTarget: lastHoveredCell });
+      }
+      if (cell) {
+        const cell = target.closest('.cell');
+        if (cell) handleCellEnter({ currentTarget: cell });
+      }
+      lastHoveredCell = cell;
+    }
   }
 }
+
 
 function endDrag() {
   if (dragElement) {
@@ -66,16 +93,24 @@ export function DragNDropSetup(setDragInfo, clearDragInfo) {
   
     document.addEventListener('pointerup', (e) => {
         if (dragElement) {
-            const target = document.elementFromPoint(e.clientX, e.clientY);
-            if (target && target.closest('.cell')) {
-              const cell = target.closest('.cell');
-              handlePieceDrop(cell); // ⬅️ This is a function in board.js
-            }
-
-      endDrag();
-      clearDragInfo(); // 👈 Tell board no piece is being dragged anymore
+          // ⬇️ Temporarily hide the preview image so it doesn't block detection
+          //dragElement.style.display = 'none';
+      
+          const target = document.elementFromPoint(e.clientX, e.clientY);
+      
+          // ⬆️ Restore visibility right after detection
+          //dragElement.style.display = 'block';
+      
+          if (target && target.closest('.cell')) {
+            const cell = target.closest('.cell');
+            handlePieceDrop(cell); // ⬅️ This is your drop logic
+          }
+      
+          endDrag();
+          clearDragInfo();
         }
-    });
+      });
+      
   
     document.addEventListener('pointermove', dragMove);
   }

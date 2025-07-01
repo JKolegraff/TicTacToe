@@ -1,3 +1,7 @@
+import { getGameId, getPlayer } from './session-data.js';
+import { getInventory } from './inventory.js';
+import { setGameData } from './game-subscribe.js';
+
 let gameBoard = Array(9).fill(null); // one slot per cell, initialized as empty
 
 export function setGameBoard(newBoard) {
@@ -72,27 +76,39 @@ const SIZE_RANK = {
 };
 
 function getCellTopPiece(cell) {
-  //const imgDiv = cell.querySelector('.cell-img');
-  const imgDiv = cell.querySelector('img');
-  return {
-    player: imgDiv.dataset.player || null,
-    size: imgDiv.dataset.size || null
-  };
-}
+    if (!(cell instanceof HTMLElement)) {
+      console.warn('Invalid cell passed to getCellTopPiece:', cell);
+      return { player: null, size: null };
+    }
+  
+    const img = cell.querySelector('img');
+    return {
+      player: img?.dataset?.player || null,
+      size: img?.dataset?.size || null
+    };
+  }
 
-function isMoveValid(cell, dragging) {
-  const current = getCellTopPiece(cell);
-  const currentRank = SIZE_RANK[current.size] || 0;
-  const newRank = SIZE_RANK[dragging.size];
-
-  console.log('Current cell:', current);
-    console.log('Dragging piece:', dragging);
-  // Must be bigger and not your own piece
-  return (
-    !current.size || // empty
-    (newRank > currentRank && current.player !== dragging.player)
-  );
-}
+  function isMoveValid(cell, dragging) {
+    if (!dragging?.size || !dragging?.player) return false;
+  
+    const current = getCellTopPiece(cell);
+    const currentRank = SIZE_RANK[current.size] || 0;
+    const newRank = SIZE_RANK[dragging.size] || 0;
+  
+    console.log('[Move Check]', {
+      cellIndex: cell.dataset.cellIndex,
+      cell: current,
+      dragging,
+      currentRank,
+      newRank
+    });
+  
+    // Valid if: cell is empty OR we're placing a bigger piece over opponent's
+    return (
+      !current.size ||
+      (newRank > currentRank && current.player !== dragging.player)
+    );
+  }
 
 function setHoverFeedback(cell, isValid) {
   cell.style.backgroundColor = isValid
@@ -104,17 +120,23 @@ function clearHover(cell) {
   cell.style.backgroundColor = '';
 }
 
-function handleCellEnter(e) {
-  if (!dragState) return;
-  const cell = e.currentTarget;
-  const valid = isMoveValid(cell, dragState);
-  setHoverFeedback(cell, valid);
-  //console.log(`Cell ${cell.dataset.cellIndex} hover: ${valid ? 'valid' : 'invalid'}`);
-}
+export function handleCellEnter(eOrCell) {
+    if (!dragState) return;
+  
+    // Support both manual call (element) and event object
+    const cell = eOrCell.currentTarget || eOrCell;
+    if (!cell) return;
+  
+    const valid = isMoveValid(cell, dragState);
+    setHoverFeedback(cell, valid);
+  }
 
-function handleCellLeave(e) {
-  clearHover(e.currentTarget);
-}
+  export function handleCellLeave(eOrCell) {
+    const cell = eOrCell.currentTarget || eOrCell;
+    if (!cell) return;
+  
+    clearHover(cell);
+  }
 
 export function BoardHoverSetup() {
   const cells = document.querySelectorAll('.cell');
@@ -138,17 +160,15 @@ export function ClearCurrentDragPiece() {
 export function handlePieceDrop(cell) {
     if (!dragState) return;
   
+    handleCellLeave(cell);
+
     const isValid = isMoveValid(cell, dragState);
     if (!isValid) return; // optionally give feedback
-  
-    // 🔄 Update the visual cell
-    //const cellImg = cell.querySelector('.cell-img img');
-//cellImg.src = dragState.player === 'p1' ? `./images/TTT_Red.png` : `./images/TTT_Green.png`;
-//cellImg.className = dragState.size; // set class to small, medium, or large
-//cellImg.dataset.player = dragState.player;
-//cellImg.dataset.size = dragState.size;
   
     // 📣 Update game logic
     const index = parseInt(cell.dataset.cellIndex);
     updateGamePiece(index, dragState); // <-- You can define this however you want
+
+    let nextTurn = getPlayer() === 'p1' ? 'p2' : 'p1';
+    setGameData(getGameId(), gameBoard, getInventory(), nextTurn);
   }

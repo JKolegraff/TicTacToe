@@ -6,6 +6,13 @@ export function setInventory(newInventory, player) {
     inventory = player === 'p1' ? newInventory[0] : newInventory[1];
 }
 
+export function reduceInventory(player, size) {
+    //const playerIndex = player === 'p1' ? 0 : 1;
+    if (inventory[size] > 0) {
+        inventory[size]--;
+    }
+}
+
 export function getInventory() {
     return inventory;
 }
