@@ -1,5 +1,5 @@
 import { getGameId } from './session-data.js';
-import { supabase } from './supabase-client.js'; // adjust path if needed
+import { supabase } from '../../core/db.js'; // adjust path if needed
 
 export function setupGameControls() {
   const newGameBtn = document.getElementById('new-game-btn');
