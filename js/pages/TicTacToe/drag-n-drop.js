@@ -1,4 +1,5 @@
 import { getPlayer } from './session-data.js';
+import { handlePieceDrop } from './board.js'; // Adjust path as needed
 
 let dragElement = null;
 
@@ -55,7 +56,7 @@ function endDrag() {
 }
 
 // 👇 Exposed setup function
-export function InventoryDragSetup(setDragInfo, clearDragInfo) {
+export function DragNDropSetup(setDragInfo, clearDragInfo) {
     document.querySelectorAll('.piece-slot img').forEach(img => {
       img.addEventListener('pointerdown', e => {
         e.target.setPointerCapture(e.pointerId); // 👈 FIX: lock pointer to this element

@@ -6,6 +6,7 @@ export function changeDisplayName(elementName) {
 
     // Example: setting from user_data object
      playerNameSpan.textContent = getDisplayName();
+     console.log('Display name updated:', getDisplayName());
 }
 
 export function setStatusText(text) {

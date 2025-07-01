@@ -7,7 +7,7 @@ export function setGameBoard(newBoard) {
 // ✅ NEW: Update one piece on the board
 export function updateGamePiece(index, state) {
     gameBoard[index] = state;
-  }
+}
 
 export function getGameBoard() {
     return gameBoard;
@@ -62,7 +62,7 @@ export function renderBoardToScreen() {
 
 
 // ./js/pages/ttt/board.js
-import { updateGameBoard } from './game-logic.js'; // Import your game logic function
+//import { updateGameBoard } from './game-logic.js'; // Import your game logic function
 let dragState = null; // Holds current dragging info: { size, player }
 
 const SIZE_RANK = {
