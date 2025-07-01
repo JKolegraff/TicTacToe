@@ -1,5 +1,5 @@
 import { supabase } from '../../core/db.js'; // adjust path as needed
-import { updateGame } from './game-subscribe.js';
+import { updateGame } from './game-logic.js'; // adjust path as needed
 
 let gameChannel = null;
 

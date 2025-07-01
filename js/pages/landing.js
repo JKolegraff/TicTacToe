@@ -11,7 +11,7 @@ export async function checkAndResumeGame(user) {
       // Redirect based on game type
       switch (gameType) {
         case 'tic-tac-toe':
-          window.location.href = '../ttt.html';
+          window.location.href = '../TicTacToe.html';
           break;
         // Add other types here as needed
         default:
@@ -79,7 +79,7 @@ export async function startNewGame(user_uuid) {
   setGameId(data.id, 'p1');
   // Redirect to the game page with game ID
   // window.location.href = `game.html?game_id=${data.id}`;
-  window.location.href = '../../ttt.html';
+  window.location.href = '../../TicTacToe.html';
 }
 
 export async function joinGame(user_uuid, gameId) {
@@ -101,7 +101,7 @@ export async function joinGame(user_uuid, gameId) {
   }
 
   setGameId(data.id, 'p2');
-  window.location.href = '../../ttt.html';
+  window.location.href = '../../TicTacToe.html';
 }
 
 window.joinGame = joinGame;
