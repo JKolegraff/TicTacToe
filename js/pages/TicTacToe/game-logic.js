@@ -12,7 +12,7 @@ export async function updateGame(data) {
 
     thisPlayer === data.turn ? enableBoard() : disableBoard();
 
-    setInventory(data.player_state, thisPlayer);
-    renderInventoryToScreen();
+    setInventory(data.player_state);
+    renderInventoryToScreen(getPlayer());
     console.log('Game updated:', data);
 }

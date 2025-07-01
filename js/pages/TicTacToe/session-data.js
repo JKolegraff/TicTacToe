@@ -18,9 +18,10 @@ export function getSessionData() {
     other_player_image = player === 'p1' ? 'images/TTT_Green.png' : 'images/TTT_Red.png';
 }
 
-export function getGameId() { return game_id;}
-export function getDisplayName() { return player_name;}
-export function getPlayerId() { return player_id;}
-export function getPlayer() { return player;}
+export function getGameId() { return getUserData().game_id;}
+export function getDisplayName() { return getUserData().displayName;}
+export function getPlayerId() { return getUserData().uuid;}
+export function getPlayer() { return getUserData().player;}
+
 export function getPlayerImage() { return player_image;}
 export function getOtherPlayerImage() { return other_player_image;}

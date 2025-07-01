@@ -1,5 +1,5 @@
 import { getGameId, getPlayer } from './session-data.js';
-import { getInventory } from './inventory.js';
+import { getInventory, reduceInventory } from './inventory.js';
 import { setGameData } from './game-subscribe.js';
 
 let gameBoard = Array(9).fill(null); // one slot per cell, initialized as empty
@@ -168,6 +168,8 @@ export function handlePieceDrop(cell) {
     // 📣 Update game logic
     const index = parseInt(cell.dataset.cellIndex);
     updateGamePiece(index, dragState); // <-- You can define this however you want
+
+    reduceInventory(getPlayer(), dragState.size);
 
     let nextTurn = getPlayer() === 'p1' ? 'p2' : 'p1';
     setGameData(getGameId(), gameBoard, getInventory(), nextTurn);
