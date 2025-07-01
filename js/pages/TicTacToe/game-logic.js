@@ -14,7 +14,7 @@ export async function updateGame(data) {
     const winner = checkForWin(data.board_state);
 
     if (winner) {
-        setStatusText(`Player ${winner === 'p1' ? '1' : '2'} wins!`);
+        setStatusText(winner === thisPlayer ? 'You win!' : 'You lose!');
         disableBoard();
     } else {
         (thisPlayer === data.turn) ? enableBoard() : disableBoard();
