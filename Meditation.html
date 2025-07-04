@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Meditation App</title>
+    <link rel="stylesheet" href="./css/meditation.css">
+</head>
+
+<body>
+    <h1>Meditation</h1>
+
+    <div id="controls">
+        <label for="duration">Duration (seconds):</label>
+        <select id="duration">
+            <option value="30">30</option>
+            <option value="45">45</option>
+            <option value="60">60</option>
+            <option value="90">90</option>
+            <option value="120">120</option>
+        </select>
+
+        <label>Phase 1 Color:
+            <input type="color" id="colorPhase1" value="#88CCEE">
+        </label>
+        <label>Phase 2 Color:
+            <input type="color" id="colorPhase2" value="#223366">
+        </label>
+        <label>Phase 3 Color:
+            <input type="color" id="colorPhase3" value="#1A1A2E">
+        </label>
+
+        <button id="startBtn">Start</button>
+    </div>
+
+    <canvas id="meditationCanvas"></canvas>
+
+    <script type="module">
+        import { pageSetup } from './js/pages/meditation/page-control.js';
+        //import { startCanvasMeditation, exitCanvasMeditation } from './js/pages/meditation/canvas-control.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            pageSetup()
+        });
+    </script>
+</body>
+
+</html>
